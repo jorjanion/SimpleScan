@@ -1,0 +1,368 @@
+<Window x:Class="SimpleScan.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:SimpleScan.UI.ViewModels"
+        mc:Ignorable="d"
+        Title="SimpleScan - Escaneo ultrarrápido y limpio"
+        Height="780" Width="1180"
+        MinHeight="600" MinWidth="850"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Main Content -->
+            <RowDefinition Height="*"/>
+            <!-- Status Bar -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOP HEADER BAR -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}" 
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="16,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo & Name -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🖨️" FontSize="26" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="SimpleScan" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="Escáner nativo sin bloatware" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Scanner Selector in Header -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Escáner:" VerticalAlignment="Center" FontWeight="Medium" Margin="0,0,8,0" FontSize="13"/>
+                    <ComboBox ItemsSource="{Binding Scanners}"
+                              SelectedItem="{Binding SelectedScanner, Mode=TwoWay}"
+                              DisplayMemberPath="Name"
+                              MinWidth="320" MaxWidth="450"
+                              Height="34"
+                              VerticalContentAlignment="Center"
+                              Margin="0,0,8,0"
+                              IsEnabled="{Binding CanScan}"/>
+                    
+                    <Button Content="🔄 Actualizar"
+                            Click="OnRefreshScannersClick"
+                            Height="34" Padding="12,0"
+                            IsEnabled="{Binding CanScan}"
+                            ToolTip="Volver a buscar escáneres en la red y por USB"/>
+                </StackPanel>
+
+                <!-- Settings Button -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="⚙️ Opciones"
+                            Click="OnToggleSettingsClick"
+                            Height="34" Padding="12,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- MAIN CONTENT (Left: Controls, Right: Preview & Thumbnails) -->
+        <Grid Grid.Row="1" Margin="16,14,16,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT CONTROL PANEL -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,16,0">
+                <StackPanel>
+                    <!-- CARD: Scan Settings -->
+                    <Border Style="{StaticResource CardPanel}">
+                        <StackPanel>
+                            <TextBlock Text="Configuración de escaneo" Style="{StaticResource SectionTitle}"/>
+
+                            <!-- DPI Selector -->
+                            <TextBlock Text="Resolución (Calidad)" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,3"/>
+                            <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding SelectedDpi, Mode=TwoWay}" Height="34" Margin="0,0,0,10">
+                                <ComboBoxItem Content="150 DPI - Rápido / Borrador" Tag="150"/>
+                                <ComboBoxItem Content="300 DPI - Estándar (Recomendado)" Tag="300"/>
+                                <ComboBoxItem Content="600 DPI - Alta Calidad (Fotos)" Tag="600"/>
+                            </ComboBox>
+
+                            <!-- Color Mode Selector -->
+                            <TextBlock Text="Modo de color" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,3"/>
+                            <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding SelectedColorMode, Mode=TwoWay}" Height="34" Margin="0,0,0,12">
+                                <ComboBoxItem Content="🎨 Color completo" Tag="{x:Static viewmodels:MainViewModel.ColorModeColor}"/>
+                                <ComboBoxItem Content="🪙 Escala de grises (B/N suave)" Tag="{x:Static viewmodels:MainViewModel.ColorModeGrayscale}"/>
+                                <ComboBoxItem Content="📄 Blanco y negro (Texto puro)" Tag="{x:Static viewmodels:MainViewModel.ColorModeBlackAndWhite}"/>
+                            </ComboBox>
+
+                            <!-- OCR Checkbox -->
+                            <CheckBox IsChecked="{Binding EnableOcr, Mode=TwoWay}" 
+                                      Content="🔤 Hacer PDF buscable (OCR español)"
+                                      FontSize="12" FontWeight="Medium"
+                                      ToolTip="Aplica reconocimiento de texto nativo de Windows para que puedas copiar y buscar texto en el PDF"
+                                      Margin="0,0,0,14"/>
+
+                            <!-- PRIMARY SCAN BUTTON -->
+                            <Button Content="📷 Escanear página"
+                                    Click="OnScanPageClick"
+                                    Height="48"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Background="#0066CC"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    IsEnabled="{Binding CanScan}"
+                                    Cursor="Hand"
+                                    HorizontalAlignment="Stretch">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- CARD: Multi-page Management -->
+                    <Border Style="{StaticResource CardPanel}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,8">
+                                <TextBlock Text="Páginas escaneadas" Style="{StaticResource SectionTitle}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Pages.Count, StringFormat='Total: {0}'}" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#0066CC"/>
+                            </Grid>
+
+                            <Button Content="➕ Añadir otra página"
+                                    Click="OnScanPageClick"
+                                    Height="36"
+                                    Margin="0,0,0,8"
+                                    IsEnabled="{Binding CanScan}"
+                                    HorizontalAlignment="Stretch"/>
+
+                            <Button Content="🗑️ Vaciar documento"
+                                    Click="OnClearAllPagesClick"
+                                    Height="32"
+                                    IsEnabled="{Binding HasPages}"
+                                    Foreground="#D9383A"
+                                    HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- CARD: Export Actions -->
+                    <Border Style="{StaticResource CardPanel}">
+                        <StackPanel>
+                            <TextBlock Text="Guardar y Exportar" Style="{StaticResource SectionTitle}"/>
+
+                            <!-- SAVE AS PDF -->
+                            <Button Content="📄 Guardar como PDF"
+                                    Click="OnSavePdfClick"
+                                    Height="44"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Background="#107C41"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    IsEnabled="{Binding HasPages}"
+                                    Cursor="Hand"
+                                    Margin="0,0,0,8"
+                                    HorizontalAlignment="Stretch">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+                            <!-- SAVE AS IMAGES -->
+                            <Button Content="🖼️ Guardar como Fotos (JPG)"
+                                    Click="OnSaveImagesClick"
+                                    Height="36"
+                                    IsEnabled="{Binding HasPages}"
+                                    Margin="0,0,0,8"
+                                    HorizontalAlignment="Stretch"/>
+
+                            <!-- COPY OCR TEXT -->
+                            <Button Content="📋 Copiar texto detectado"
+                                    Click="OnCopyTextClick"
+                                    Height="34"
+                                    IsEnabled="{Binding HasPages}"
+                                    ToolTip="Copia al portapapeles todo el texto extraído por el OCR"
+                                    HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- RIGHT PANEL: Preview & Multi-Page Thumbnails -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <!-- Page Action Toolbar -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Main Preview -->
+                    <RowDefinition Height="*"/>
+                    <!-- Thumbnails Strip -->
+                    <RowDefinition Height="130"/>
+                </Grid.RowDefinitions>
+
+                <!-- PREVIEW TOOLBAR -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" 
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" 
+                        CornerRadius="6" Padding="10,6" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Page Indicator -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Vista previa:" FontWeight="SemiBold" Margin="0,0,6,0"/>
+                            <TextBlock Text="{Binding SelectedPage.DisplayPageNumber, StringFormat='Página {0}'}" 
+                                       FontWeight="Bold" Foreground="#0066CC" Margin="0,0,6,0"/>
+                            <TextBlock Text="{Binding Pages.Count, StringFormat='de {0}'}" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
+
+                        <!-- Rotation & Delete Buttons -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Button Content="↺ Girar 90° Izquierda" Click="OnRotateLeftClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Margin="0,0,6,0" Padding="8,0"/>
+                            <Button Content="↻ Girar 90° Derecha" Click="OnRotateRightClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Margin="0,0,6,0" Padding="8,0"/>
+                            <Button Content="❌ Eliminar página" Click="OnDeleteCurrentPageClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Foreground="#D9383A" Padding="8,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- MAIN PREVIEW VIEWER -->
+                <Border Grid.Row="1" Background="#222222" CornerRadius="8" BorderThickness="1" BorderBrush="#333333" Margin="0,0,0,10" ClipToBounds="True">
+                    <Grid>
+                        <!-- When pages exist -->
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <Image Source="{Binding SelectedPage.PreviewImage}"
+                                   Stretch="Uniform"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Margin="10"/>
+                        </ScrollViewer>
+
+                        <!-- When NO pages yet -->
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Visibility="{Binding HasPages, Converter={StaticResource BoolToVisConverter}, ConverterParameter=Inverse}">
+                            <TextBlock Text="📄" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity="0.4"/>
+                            <TextBlock Text="No hay ninguna página escaneada" FontSize="18" FontWeight="SemiBold" Foreground="#AAAAAA" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Coloca un documento en la impresora y pulsa 'Escanear página'" FontSize="13" Foreground="#777777" Margin="0,6,0,16" HorizontalAlignment="Center"/>
+                            <Button Content="📷 Escanear ahora" Click="OnScanPageClick" Height="40" Padding="20,0" Background="#0066CC" Foreground="White" BorderThickness="0" IsEnabled="{Binding CanScan}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- THUMBNAILS HORIZONTAL STRIP -->
+                <Border Grid.Row="2" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" 
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" 
+                        CornerRadius="8" Padding="8">
+                    <Grid>
+                        <TextBlock Text="Páginas:" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Top"/>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,14,0,0">
+                            <ItemsControl ItemsSource="{Binding Pages}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="85" Height="95" Margin="4,0" CornerRadius="6"
+                                                BorderThickness="{Binding IsSelected, Converter={x:Static viewmodels:SelectedBorderConverter.Instance}}"
+                                                BorderBrush="#0066CC"
+                                                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                                                MouseLeftButtonDown="OnThumbnailClick"
+                                                Cursor="Hand">
+                                            <Grid>
+                                                <Image Source="{Binding PreviewImage}" Stretch="Uniform" Margin="4,4,4,18"/>
+                                                <Border Background="#CC000000" CornerRadius="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,2" Padding="6,1">
+                                                    <TextBlock Text="{Binding DisplayPageNumber, StringFormat='Pág. {0}'}" 
+                                                               FontSize="10" FontWeight="Bold" Foreground="White"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- STATUS BAR -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}" 
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="16,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" Width="100" Height="10" Margin="0,0,10,0"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisConverter}}"/>
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" Text="SimpleScan v1.0 • Código Abierto" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- SETTINGS MODAL OVERLAY -->
+        <Border Grid.RowSpan="3" Background="#80000000" 
+                Visibility="{Binding ShowSettings, Converter={StaticResource BoolToVisConverter}}"
+                Panel.ZIndex="100">
+            <Border Background="{DynamicResource ApplicationBackgroundBrush}" 
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" 
+                    CornerRadius="10" Width="480" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="24">
+                <StackPanel>
+                    <TextBlock Text="⚙️ Configuración de SimpleScan" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                    <CheckBox IsChecked="{Binding PromptSaveLocation, Mode=TwoWay}"
+                              Content="Preguntar siempre dónde guardar el archivo"
+                              FontSize="13" Margin="0,0,0,16"/>
+
+                    <TextBlock Text="Carpeta de guardado rápido por defecto:" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,4"/>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding DefaultSaveDirectory, Mode=TwoWay}" Height="34" VerticalContentAlignment="Center"/>
+                        <Button Grid.Column="1" Content="Examinar..." Click="OnBrowseDefaultFolderClick" Height="34" Margin="6,0,0,0" Padding="12,0"/>
+                    </Grid>
+
+                    <Button Content="Cerrar opciones" Click="OnToggleSettingsClick" Height="36" Background="#0066CC" Foreground="White" BorderThickness="0" HorizontalAlignment="Right" Padding="20,0"/>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

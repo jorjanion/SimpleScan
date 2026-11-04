@@ -1,0 +1,54 @@
+name: Build & Release SimpleScan
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build, Test & Package
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore SimpleScan.sln
+
+    - name: Run automated tests
+      run: dotnet test SimpleScan.sln -c Release --no-restore --verbosity normal
+
+    - name: Publish standalone portable executable
+      run: >
+        dotnet publish src/SimpleScan.UI/SimpleScan.UI.csproj
+        -c Release
+        -r win-x64
+        --self-contained
+        -p:PublishSingleFile=true
+        -p:IncludeNativeLibrariesForSelfExtract=true
+        -o dist/portable
+
+    - name: Upload portable artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SimpleScan-win-x64
+        path: dist/portable/SimpleScan.exe
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          dist/portable/SimpleScan.exe
+        draft: false
+        prerelease: false
+        generate_release_notes: true
