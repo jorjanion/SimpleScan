@@ -16,7 +16,9 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        App.Log("MainWindow::ctor enter");
         InitializeComponent();
+        App.Log("MainWindow::InitializeComponent finished");
 
         var settingsService = new SettingsService();
         var scannerService = new WiaScannerService();
@@ -33,11 +35,21 @@ public partial class MainWindow : Window
 
         DataContext = _viewModel;
         Loaded += MainWindow_Loaded;
+        App.Log("MainWindow::ctor finished");
     }
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        await _viewModel.InitializeAsync();
+        App.Log("MainWindow::Loaded enter");
+        try
+        {
+            await _viewModel.InitializeAsync();
+            App.Log("MainWindow::Loaded InitializeAsync finished");
+        }
+        catch (Exception ex)
+        {
+            App.Log("MainWindow::Loaded ERROR: " + ex);
+        }
     }
 
     private async void OnRefreshScannersClick(object sender, RoutedEventArgs e)

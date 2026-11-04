@@ -14,6 +14,8 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <viewmodels:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisConverter"/>
+        <viewmodels:SelectedBorderConverter x:Key="BorderConverter"/>
         
         <Style x:Key="CardPanel" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}"/>
@@ -270,7 +272,7 @@
 
                         <!-- When NO pages yet -->
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
-                                    Visibility="{Binding HasPages, Converter={StaticResource BoolToVisConverter}, ConverterParameter=Inverse}">
+                                    Visibility="{Binding HasPages, Converter={StaticResource InverseBoolToVisConverter}}">
                             <TextBlock Text="📄" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity="0.4"/>
                             <TextBlock Text="No hay ninguna página escaneada" FontSize="18" FontWeight="SemiBold" Foreground="#AAAAAA" HorizontalAlignment="Center"/>
                             <TextBlock Text="Coloca un documento en la impresora y pulsa 'Escanear página'" FontSize="13" Foreground="#777777" Margin="0,6,0,16" HorizontalAlignment="Center"/>
@@ -295,7 +297,7 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Width="85" Height="95" Margin="4,0" CornerRadius="6"
-                                                BorderThickness="{Binding IsSelected, Converter={x:Static viewmodels:SelectedBorderConverter.Instance}}"
+                                                BorderThickness="{Binding IsSelected, Converter={StaticResource BorderConverter}}"
                                                 BorderBrush="#0066CC"
                                                 Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
                                                 MouseLeftButtonDown="OnThumbnailClick"

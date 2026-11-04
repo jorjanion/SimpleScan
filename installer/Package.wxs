@@ -1,7 +1,7 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package Name="SimpleScan"
            Manufacturer="Jorge (jorjanion)"
-           Version="1.0.1"
+           Version="1.0.2"
            UpgradeCode="4F82C10E-6F3C-4C9D-99D8-6DF88B69A1C5"
            Scope="perUser">
 
@@ -10,31 +10,43 @@
     <MediaTemplate EmbedCab="yes" />
 
     <StandardDirectory Id="LocalAppDataFolder">
-      <Directory Id="INSTALLFOLDER" Name="SimpleScan">
-        <Component Id="MainExecutable" Guid="3E4924A2-9572-4B2E-B9D1-3DFB58F58E91">
-          <File Id="SimpleScanExe" Source="dist\portable\SimpleScan.exe" KeyPath="yes">
-            <Shortcut Id="DesktopShortcut"
-                      Directory="DesktopFolder"
-                      Name="SimpleScan"
-                      Description="Escáner ultrarrápido sin bloatware"
-                      WorkingDirectory="INSTALLFOLDER"
-                      Advertise="yes" />
-            <Shortcut Id="StartMenuShortcut"
-                      Directory="ProgramMenuFolder"
-                      Name="SimpleScan"
-                      Description="Escáner ultrarrápido sin bloatware"
-                      WorkingDirectory="INSTALLFOLDER"
-                      Advertise="yes" />
-          </File>
-        </Component>
+      <Directory Id="ProgramsFolder" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="SimpleScan">
+          <Component Id="MainExecutable" Guid="3E4924A2-9572-4B2E-B9D1-3DFB58F58E91">
+            <File Id="SimpleScanExe" Source="dist\portable\SimpleScan.exe" KeyPath="yes" />
+            <RemoveFolder Id="RemoveInstallFolder" Directory="INSTALLFOLDER" On="uninstall" />
+            <RemoveFolder Id="RemoveProgramsFolder" Directory="ProgramsFolder" On="uninstall" />
+          </Component>
+        </Directory>
       </Directory>
     </StandardDirectory>
 
-    <StandardDirectory Id="DesktopFolder" />
-    <StandardDirectory Id="ProgramMenuFolder" />
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="DesktopShortcutComponent" Guid="A762F590-3E83-49F4-98DC-16F5E37013AA">
+        <Shortcut Id="DesktopShortcut"
+                  Name="SimpleScan"
+                  Description="Escáner ultrarrápido sin bloatware"
+                  Target="[INSTALLFOLDER]SimpleScan.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\SimpleScan" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="StartMenuShortcutComponent" Guid="85D2BC32-159B-4DE0-9F1C-D2316499B782">
+        <Shortcut Id="StartMenuShortcut"
+                  Name="SimpleScan"
+                  Description="Escáner ultrarrápido sin bloatware"
+                  Target="[INSTALLFOLDER]SimpleScan.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\SimpleScan" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
 
     <Feature Id="MainFeature" Title="SimpleScan" Level="1">
       <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="DesktopShortcutComponent" />
+      <ComponentRef Id="StartMenuShortcutComponent" />
     </Feature>
   </Package>
 </Wix>
