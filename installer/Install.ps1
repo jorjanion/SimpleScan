@@ -86,7 +86,7 @@ if (-not (Test-Path $uninstallKey)) {
     New-Item -Path $uninstallKey -Force | Out-Null
 }
 Set-ItemProperty -Path $uninstallKey -Name "DisplayName" -Value "SimpleScan"
-Set-ItemProperty -Path $uninstallKey -Name "DisplayVersion" -Value "1.0.0"
+Set-ItemProperty -Path $uninstallKey -Name "DisplayVersion" -Value "1.0.3"
 Set-ItemProperty -Path $uninstallKey -Name "Publisher" -Value "Jorge (jorjanion)"
 Set-ItemProperty -Path $uninstallKey -Name "InstallLocation" -Value $installDir
 Set-ItemProperty -Path $uninstallKey -Name "DisplayIcon" -Value "$targetExe,0"

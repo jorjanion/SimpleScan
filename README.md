@@ -1,67 +1,72 @@
 # 🖨️ SimpleScan
 
+**English** | [Español](README.es.md)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform: Windows 10 / 11](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://microsoft.com/windows)
 [![.NET 9.0](https://img.shields.io/badge/.NET-9.0-512BD4.svg)](https://dotnet.microsoft.com/)
 
-**SimpleScan** es una aplicación de escritorio nativa para Windows, ultrarrápida, limpia y ligera, diseñada para escanear documentos sin la lentitud, la publicidad, el bloatware ni las cuentas en la nube que imponen aplicaciones como *HP Smart*.
-
-Nacida originalmente para hacer volar el escáner de una **HP Smart Tank Plus 550** en ordenadores modestos (como portátiles con Intel Core i3), **SimpleScan** funciona con cualquier escáner o impresora multifunción del mercado compatible con **WIA 2.0 / eSCL** (HP, Canon, Epson, Brother, etc.).
+**SimpleScan** is a clean, lightweight, native Windows desktop application for scanning documents without bloatware, advertisements, background telemetry, or mandatory cloud logins. It works with any scanner or multifunction printer compatible with **WIA 2.0 / eSCL** (HP, Canon, Epson, Brother, and others).
 
 ---
 
-## ✨ Características Principales
+## Features
 
-- ⚡ **Rendimiento extremo**: Arranca en menos de 400 ms y consume menos de 45 MB de RAM.
-- 🔍 **Detección automática**: Detecta de inmediato tu escáner (por Wi-Fi o USB) sin configurar nada.
-- 📑 **Escaneo multipágina ágil**: Añade páginas consecutivas, previsualízalas, reordénalas, gíralas 90° si han salido torcidas o elimina las defectuosas antes de guardar.
-- ⚙️ **Control de calidad**: Selecciona fácilmente la resolución (75, 150, 300, 600 DPI) y modo de color (Color, Escala de grises, Blanco y negro).
-- 🔤 **OCR nativo en español (y otros idiomas)**: Utiliza el motor nativo acelerado por hardware de Windows (`Windows.Media.Ocr`). Sin descargas de 100 MB ni servicios en la nube: 100% privado y offline.
-- 📄 **PDF Buscable (Searchable PDF)**: Genera PDFs donde el texto escaneado se puede seleccionar, copiar y buscar (Ctrl+F) en cualquier visor de PDF.
-- 📋 **Extracción directa de texto**: Botón para copiar todo el texto reconocido al portapapeles con un solo clic.
-- 🖼️ **Exportación flexible**: Guarda como un único PDF combinado o como imágenes individuales (PNG/JPG).
-- 🛡️ **0% Bloatware**: Sin inicios de sesión obligatorios, sin suscripciones, sin telemetría intrusiva y sin procesos en segundo plano.
-
----
-
-## 🚀 Requisitos del Sistema
-
-- **Sistema Operativo**: Windows 10 (versión 19041 o superior) o Windows 11.
-- **Hardware**: Cualquier procesador x64 (optimizado incluso para Intel Celeron / Core i3 y 4 GB de RAM).
-- **Impresora / Escáner**: Cualquier dispositivo conectado por USB o red Wi-Fi reconocido por Windows (drivers WIA nativos o eSCL/Mopria).
+- **Fast and Lightweight**: Instant startup with minimal memory and CPU usage.
+- **Auto-Detection**: Automatically detects scanners connected via USB or local network via WIA.
+- **Multi-page Management**: Scan consecutive pages, preview thumbnails, reorder pages, rotate 90°, and delete unwanted pages before saving.
+- **Configurable Quality**: Adjust scan resolution (75, 150, 300, 600 DPI) and color modes (Color, Grayscale, Black & White).
+- **Native Windows OCR**: Integrated optical character recognition using the hardware-accelerated Windows OCR engine (`Windows.Media.Ocr`). Completely local and private, with no cloud communication required.
+- **Searchable PDF Export**: Creates PDF files where recognized text can be selected, searched (Ctrl+F), and copied in any standard PDF reader.
+- **Copy Text to Clipboard**: Instantly copy OCR text from scanned pages with a single click.
+- **Flexible Export Formats**: Save as a combined multi-page PDF or individual image files (PNG, JPEG).
+- **Zero Bloatware**: No account requirements, no background services, no subscriptions, and no telemetry.
 
 ---
 
-## 💾 Descargas (Releases)
+## System Requirements
 
-En la sección de [Releases de GitHub](https://github.com/jorjanion/SimpleScan/releases) encontrarás:
-- **`SimpleScan-Installer.msi`**: Instalador oficial para Windows. Instala la aplicación en tu sistema, crea accesos directos en el Escritorio y en el Menú Inicio, y permite desinstalar limpiamente desde la configuración de Windows.
-- **`SimpleScan-Portable.exe`**: Versión portable en un único archivo ejecutable. No requiere instalación: descárgalo, ponlo donde quieras (incluso en un pendrive) y haz doble clic para usarlo.
-- **`SimpleScan-Portable.zip`**: Archivo comprimido con la versión portable.
+- **Operating System**: Windows 10 (version 19041 or higher) or Windows 11 (64-bit).
+- **Scanner**: Any WIA 2.0 or eSCL compatible scanner or multifunction printer supported by Windows.
+- **Runtime**: Portable and installer releases are self-contained and require no additional runtime installation.
 
 ---
 
-## 📦 Compilación y Desarrollo
+## Downloads
 
-Para compilar el proyecto localmente:
+Download pre-built packages from the [GitHub Releases](https://github.com/jorjanion/SimpleScan/releases) section:
+
+- **`SimpleScan-Setup.exe`**: Standard interactive installer (Inno Setup) with setup wizard, desktop and start menu shortcuts, and clean uninstaller.
+- **`SimpleScan-Installer.msi`**: Windows Installer (MSI) package for system installation or enterprise deployment.
+- **`SimpleScan-Portable.exe`**: Standalone portable single-file executable. Runs without installation.
+- **`SimpleScan-Portable.zip`**: Compressed archive containing the portable executable.
+
+---
+
+## Building and Development
+
+Building from source requires the [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0):
 
 ```powershell
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/jorjanion/SimpleScan.git
 cd SimpleScan
 
-# Restaurar dependencias y compilar
-dotnet build
+# Restore dependencies
+dotnet restore SimpleScan.sln
 
-# Ejecutar la aplicación
+# Run automated tests
+dotnet test SimpleScan.sln -c Release
+
+# Run the UI project in development mode
 dotnet run --project src/SimpleScan.UI
 
-# Publicar como ejecutable único autocontenido (sin dependencias)
-dotnet publish src/SimpleScan.UI -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o ./dist
+# Publish self-contained portable executable
+dotnet publish src/SimpleScan.UI/SimpleScan.UI.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o dist/portable
 ```
 
 ---
 
-## 📄 Licencia
+## License
 
-Este proyecto se distribuye bajo la licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+This project is licensed under the [MIT License](LICENSE).

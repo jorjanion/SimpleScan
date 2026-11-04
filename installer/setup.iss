@@ -1,6 +1,6 @@
 ; Inno Setup Script for SimpleScan
 #define MyAppName "SimpleScan"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.3"
 #define MyAppPublisher "Jorge (jorjanion)"
 #define MyAppURL "https://github.com/jorjanion/SimpleScan"
 #define MyAppExeName "SimpleScan.exe"
@@ -15,7 +15,8 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=SimpleScan-Setup-v{#MyAppVersion}
+OutputDir=..\dist\installer
+OutputBaseFilename=SimpleScan-Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern

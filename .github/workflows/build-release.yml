@@ -23,8 +23,10 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
-    - name: Install WiX 5 Toolset
-      run: dotnet tool install -g wix --version 5.0.2
+    - name: Install WiX 5 Toolset & Extensions
+      run: |
+        dotnet tool install -g wix --version 5.0.2
+        wix extension add -g WixToolset.UI.wixext/5.0.2
 
     - name: Restore dependencies
       run: dotnet restore SimpleScan.sln
@@ -52,7 +54,13 @@ jobs:
       shell: pwsh
       run: |
         New-Item -ItemType Directory -Path dist/installer -Force
-        wix build installer/Package.wxs -o dist/installer/SimpleScan-Installer.msi
+        wix build installer/Package.wxs -ext WixToolset.UI.wixext/5.0.2 -o dist/installer/SimpleScan-Installer.msi
+
+    - name: Build Inno Setup Installer
+      shell: pwsh
+      run: |
+        choco install innosetup --no-progress
+        & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" installer/setup.iss
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -62,6 +70,7 @@ jobs:
           dist/portable/SimpleScan-Portable.exe
           dist/portable/SimpleScan-Portable.zip
           dist/installer/SimpleScan-Installer.msi
+          dist/installer/SimpleScan-Setup.exe
 
     - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/v')
@@ -69,6 +78,7 @@ jobs:
       with:
         files: |
           dist/installer/SimpleScan-Installer.msi
+          dist/installer/SimpleScan-Setup.exe
           dist/portable/SimpleScan-Portable.exe
           dist/portable/SimpleScan-Portable.zip
         draft: false
