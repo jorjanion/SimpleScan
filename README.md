@@ -32,6 +32,15 @@ Nacida originalmente para hacer volar el escáner de una **HP Smart Tank Plus 55
 
 ---
 
+## 💾 Descargas (Releases)
+
+En la sección de [Releases de GitHub](https://github.com/jorjanion/SimpleScan/releases) encontrarás:
+- **`SimpleScan-Installer.msi`**: Instalador oficial para Windows. Instala la aplicación en tu sistema, crea accesos directos en el Escritorio y en el Menú Inicio, y permite desinstalar limpiamente desde la configuración de Windows.
+- **`SimpleScan-Portable.exe`**: Versión portable en un único archivo ejecutable. No requiere instalación: descárgalo, ponlo donde quieras (incluso en un pendrive) y haz doble clic para usarlo.
+- **`SimpleScan-Portable.zip`**: Archivo comprimido con la versión portable.
+
+---
+
 ## 📦 Compilación y Desarrollo
 
 Para compilar el proyecto localmente:

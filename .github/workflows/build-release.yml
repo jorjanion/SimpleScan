@@ -23,6 +23,9 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    - name: Install WiX 5 Toolset
+      run: dotnet tool install -g wix --version 5.0.2
+
     - name: Restore dependencies
       run: dotnet restore SimpleScan.sln
 
@@ -39,18 +42,35 @@ jobs:
         -p:IncludeNativeLibrariesForSelfExtract=true
         -o dist/portable
 
-    - name: Upload portable artifact
+    - name: Package Portable Executable & Zip
+      shell: pwsh
+      run: |
+        Copy-Item dist/portable/SimpleScan.exe dist/portable/SimpleScan-Portable.exe -Force
+        Compress-Archive -Path dist/portable/SimpleScan.exe -DestinationPath dist/portable/SimpleScan-Portable.zip -Force
+
+    - name: Build MSI Installer
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Path dist/installer -Force
+        wix build installer/Package.wxs -o dist/installer/SimpleScan-Installer.msi
+
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: SimpleScan-win-x64
-        path: dist/portable/SimpleScan.exe
+        name: SimpleScan-Packages
+        path: |
+          dist/portable/SimpleScan-Portable.exe
+          dist/portable/SimpleScan-Portable.zip
+          dist/installer/SimpleScan-Installer.msi
 
     - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          dist/portable/SimpleScan.exe
+          dist/installer/SimpleScan-Installer.msi
+          dist/portable/SimpleScan-Portable.exe
+          dist/portable/SimpleScan-Portable.zip
         draft: false
         prerelease: false
         generate_release_notes: true

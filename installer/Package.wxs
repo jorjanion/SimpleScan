@@ -1,0 +1,40 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="SimpleScan"
+           Manufacturer="Jorge (jorjanion)"
+           Version="1.0.1"
+           UpgradeCode="4F82C10E-6F3C-4C9D-99D8-6DF88B69A1C5"
+           Scope="perUser">
+
+    <MajorUpgrade DowngradeErrorMessage="Ya hay una versión más reciente instalada." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="INSTALLFOLDER" Name="SimpleScan">
+        <Component Id="MainExecutable" Guid="3E4924A2-9572-4B2E-B9D1-3DFB58F58E91">
+          <File Id="SimpleScanExe" Source="dist\portable\SimpleScan.exe" KeyPath="yes">
+            <Shortcut Id="DesktopShortcut"
+                      Directory="DesktopFolder"
+                      Name="SimpleScan"
+                      Description="Escáner ultrarrápido sin bloatware"
+                      WorkingDirectory="INSTALLFOLDER"
+                      Advertise="yes" />
+            <Shortcut Id="StartMenuShortcut"
+                      Directory="ProgramMenuFolder"
+                      Name="SimpleScan"
+                      Description="Escáner ultrarrápido sin bloatware"
+                      WorkingDirectory="INSTALLFOLDER"
+                      Advertise="yes" />
+          </File>
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="MainFeature" Title="SimpleScan" Level="1">
+      <ComponentRef Id="MainExecutable" />
+    </Feature>
+  </Package>
+</Wix>

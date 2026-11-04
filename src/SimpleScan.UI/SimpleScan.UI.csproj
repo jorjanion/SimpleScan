@@ -15,8 +15,4 @@
     <ProjectReference Include="..\SimpleScan.Core\SimpleScan.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="WPF.UI" Version="3.4.2.7" />
-  </ItemGroup>
-
 </Project>
