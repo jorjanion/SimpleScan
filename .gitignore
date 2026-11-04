@@ -1,0 +1,50 @@
+## .NET and Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+*.exe
+*.dll
+*.pdb
+*.msi
+*.appx
+*.msix
+
+## Secret and Sensitive Information Protection
+*.env*
+secrets.*
+*.key
+*.pem
+*.pfx
+*.snk
+appsettings*.local.json
+credentials.json
+token.json
+*.id_rsa
+
+## OS Generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+## SimpleScan output and temporary test files
+/scans/
+/output/
+*.pdf
+*.scan.tmp
+*.tmp
