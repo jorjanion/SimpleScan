@@ -1,6 +1,6 @@
 ; Inno Setup Script for SimpleScan
 #define MyAppName "SimpleScan"
-#define MyAppVersion "1.0.4"
+#define MyAppVersion "1.0.5"
 #define MyAppPublisher "Jorge (jorjanion)"
 #define MyAppURL "https://github.com/jorjanion/SimpleScan"
 #define MyAppExeName "SimpleScan.exe"
