@@ -1,10 +1,24 @@
-# 🖨️ SimpleScan
+<p align="center">
+  <img src="assets/icon.png" width="100" height="100" alt="Icono de SimpleScan" />
+</p>
 
-[English](README.md) | **Español**
+<h1 align="center">SimpleScan</h1>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform: Windows 10 / 11](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://microsoft.com/windows)
-[![.NET 9.0](https://img.shields.io/badge/.NET-9.0-512BD4.svg)](https://dotnet.microsoft.com/)
+<p align="center">
+  <strong>Escaneo de documentos rápido, nativo y sin bloatware para Windows</strong>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <b>Español</b>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://microsoft.com/windows"><img src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg" alt="Platform: Windows 10 / 11" /></a>
+  <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-9.0-512BD4.svg" alt=".NET 9.0" /></a>
+</p>
+
+---
 
 **SimpleScan** es una aplicación de escritorio nativa para Windows, rápida y ligera, diseñada para escanear documentos sin publicidad, bloatware ni cuentas en la nube. Funciona con cualquier escáner o impresora multifunción compatible con el estándar **WIA 2.0 / eSCL** (HP, Canon, Epson, Brother, etc.).
 

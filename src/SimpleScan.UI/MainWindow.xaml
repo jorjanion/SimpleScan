@@ -6,6 +6,7 @@
         xmlns:viewmodels="clr-namespace:SimpleScan.UI.ViewModels"
         mc:Ignorable="d"
         Title="SimpleScan - Escaneo ultrarrápido y limpio"
+        Icon="pack://application:,,,/assets/icon.png"
         Height="780" Width="1180"
         MinHeight="600" MinWidth="850"
         WindowStartupLocation="CenterScreen"
@@ -55,7 +56,7 @@
 
                 <!-- Logo & Name -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="🖨️" FontSize="26" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Image Source="pack://application:,,,/assets/icon.png" Width="30" Height="30" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="SimpleScan" FontSize="18" FontWeight="Bold"/>
                         <TextBlock Text="Escáner nativo sin bloatware" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -134,18 +135,9 @@
                                     Height="48"
                                     FontSize="16"
                                     FontWeight="Bold"
-                                    Background="#0066CC"
-                                    Foreground="White"
-                                    BorderThickness="0"
+                                    Style="{StaticResource PrimaryButton}"
                                     IsEnabled="{Binding CanScan}"
-                                    Cursor="Hand"
-                                    HorizontalAlignment="Stretch">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="6"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
+                                    HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
@@ -170,7 +162,7 @@
                                     Click="OnClearAllPagesClick"
                                     Height="32"
                                     IsEnabled="{Binding HasPages}"
-                                    Foreground="#D9383A"
+                                    Style="{StaticResource DangerButton}"
                                     HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
@@ -186,19 +178,10 @@
                                     Height="44"
                                     FontSize="14"
                                     FontWeight="SemiBold"
-                                    Background="#107C41"
-                                    Foreground="White"
-                                    BorderThickness="0"
+                                    Style="{StaticResource SuccessButton}"
                                     IsEnabled="{Binding HasPages}"
-                                    Cursor="Hand"
                                     Margin="0,0,0,8"
-                                    HorizontalAlignment="Stretch">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="6"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
+                                    HorizontalAlignment="Stretch"/>
 
                             <!-- SAVE AS IMAGES -->
                             <Button Content="🖼️ Guardar como Fotos (JPG)"
@@ -254,7 +237,7 @@
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <Button Content="↺ Girar 90° Izquierda" Click="OnRotateLeftClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Margin="0,0,6,0" Padding="8,0"/>
                             <Button Content="↻ Girar 90° Derecha" Click="OnRotateRightClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Margin="0,0,6,0" Padding="8,0"/>
-                            <Button Content="❌ Eliminar página" Click="OnDeleteCurrentPageClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Foreground="#D9383A" Padding="8,0"/>
+                            <Button Content="❌ Eliminar página" Click="OnDeleteCurrentPageClick" IsEnabled="{Binding HasSelectedPage}" Height="30" Style="{StaticResource DangerButton}" Padding="8,0"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -273,10 +256,33 @@
                         <!-- When NO pages yet -->
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
                                     Visibility="{Binding HasPages, Converter={StaticResource InverseBoolToVisConverter}}">
-                            <TextBlock Text="📄" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,10" Opacity="0.4"/>
-                            <TextBlock Text="No hay ninguna página escaneada" FontSize="18" FontWeight="SemiBold" Foreground="#AAAAAA" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Coloca un documento en la impresora y pulsa 'Escanear página'" FontSize="13" Foreground="#777777" Margin="0,6,0,16" HorizontalAlignment="Center"/>
-                            <Button Content="📷 Escanear ahora" Click="OnScanPageClick" Height="40" Padding="20,0" Background="#0066CC" Foreground="White" BorderThickness="0" IsEnabled="{Binding CanScan}"/>
+                            <!-- High-contrast scanner & document card -->
+                            <Border Width="92" Height="92" Background="#2A3441" BorderBrush="#0088FF" BorderThickness="2" CornerRadius="16" Margin="0,0,0,18" HorizontalAlignment="Center">
+                                <Grid>
+                                    <!-- Sheet of paper -->
+                                    <Border Width="48" Height="60" Background="#FFFFFF" CornerRadius="4" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,2">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.4"/>
+                                        </Border.Effect>
+                                        <StackPanel Margin="7,8,7,0">
+                                            <Border Height="4" Background="#0088FF" CornerRadius="2" Margin="0,0,12,6"/>
+                                            <Border Height="3" Background="#CBD5E1" CornerRadius="1" Margin="0,0,0,4"/>
+                                            <Border Height="3" Background="#CBD5E1" CornerRadius="1" Margin="0,0,4,4"/>
+                                            <Border Height="3" Background="#CBD5E1" CornerRadius="1" Margin="0,0,8,4"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <!-- Glowing cyan laser scan line -->
+                                    <Border Height="3" Background="#00E5FF" VerticalAlignment="Center" Margin="10,0">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#00E5FF" BlurRadius="10" ShadowDepth="0" Opacity="0.95"/>
+                                        </Border.Effect>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock Text="No hay ninguna página escaneada" FontSize="18" FontWeight="SemiBold" Foreground="#F8FAFC" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Coloca un documento en la impresora y pulsa 'Escanear página'" FontSize="13" Foreground="#94A3B8" Margin="0,6,0,18" HorizontalAlignment="Center"/>
+                            <Button Content="📷 Escanear ahora" Click="OnScanPageClick" Height="42" Padding="24,0" Style="{StaticResource PrimaryButton}" IsEnabled="{Binding CanScan}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -362,7 +368,7 @@
                         <Button Grid.Column="1" Content="Examinar..." Click="OnBrowseDefaultFolderClick" Height="34" Margin="6,0,0,0" Padding="12,0"/>
                     </Grid>
 
-                    <Button Content="Cerrar opciones" Click="OnToggleSettingsClick" Height="36" Background="#0066CC" Foreground="White" BorderThickness="0" HorizontalAlignment="Right" Padding="20,0"/>
+                    <Button Content="Cerrar opciones" Click="OnToggleSettingsClick" Height="36" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Padding="20,0"/>
                 </StackPanel>
             </Border>
         </Border>

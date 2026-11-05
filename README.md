@@ -1,10 +1,24 @@
-# 🖨️ SimpleScan
+<p align="center">
+  <img src="assets/icon.png" width="100" height="100" alt="SimpleScan Icon" />
+</p>
 
-**English** | [Español](README.es.md)
+<h1 align="center">SimpleScan</h1>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform: Windows 10 / 11](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://microsoft.com/windows)
-[![.NET 9.0](https://img.shields.io/badge/.NET-9.0-512BD4.svg)](https://dotnet.microsoft.com/)
+<p align="center">
+  <strong>Fast, native, bloatware-free scanner software for Windows</strong>
+</p>
+
+<p align="center">
+  <b>English</b> | <a href="README.es.md">Español</a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://microsoft.com/windows"><img src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg" alt="Platform: Windows 10 / 11" /></a>
+  <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-9.0-512BD4.svg" alt=".NET 9.0" /></a>
+</p>
+
+---
 
 **SimpleScan** is a clean, lightweight, native Windows desktop application for scanning documents without bloatware, advertisements, background telemetry, or mandatory cloud logins. It works with any scanner or multifunction printer compatible with **WIA 2.0 / eSCL** (HP, Canon, Epson, Brother, and others).
 

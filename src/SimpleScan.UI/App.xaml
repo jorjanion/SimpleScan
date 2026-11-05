@@ -20,11 +20,129 @@
                 <Setter Property="FontFamily" Value="{StaticResource FluentFontFamily}"/>
             </Style>
 
+            <!-- Standard Secondary Button (Default) -->
             <Style TargetType="Button">
                 <Setter Property="FontFamily" Value="{StaticResource FluentFontFamily}"/>
                 <Setter Property="Background" Value="#FFFFFF"/>
                 <Setter Property="Foreground" Value="#1E1E1E"/>
                 <Setter Property="BorderBrush" Value="#D1D1D1"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="12,6"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#F2F4F7"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#94A3B8"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#E2E8F0"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="Opacity" Value="0.45"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Primary Accent Button (Scan Actions) -->
+            <Style x:Key="PrimaryButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource FluentFontFamily}"/>
+                <Setter Property="Background" Value="#0066CC"/>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#0066CC"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="16,8"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#0055AA"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#004488"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="Background" Value="#93C5FD"/>
+                                    <Setter Property="Foreground" Value="#E2E8F0"/>
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Success Accent Button (Save as PDF) -->
+            <Style x:Key="SuccessButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource FluentFontFamily}"/>
+                <Setter Property="Background" Value="#107C41"/>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#107C41"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="16,8"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#0E6B38"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#0A5029"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="Background" Value="#86EFAC"/>
+                                    <Setter Property="Foreground" Value="#F0FDF4"/>
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Danger Button (Clear / Delete) -->
+            <Style x:Key="DangerButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource FluentFontFamily}"/>
+                <Setter Property="Background" Value="#FFF1F0"/>
+                <Setter Property="Foreground" Value="#D9383A"/>
+                <Setter Property="BorderBrush" Value="#FFA39E"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Padding" Value="10,6"/>
                 <Setter Property="Cursor" Value="Hand"/>
@@ -41,10 +159,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                    <Setter TargetName="border" Property="Background" Value="#FF4D4F"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#FF4D4F"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#E5E5E5"/>
+                                    <Setter TargetName="border" Property="Background" Value="#CF1322"/>
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#CF1322"/>
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter TargetName="border" Property="Opacity" Value="0.45"/>
